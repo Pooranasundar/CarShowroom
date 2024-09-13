@@ -1,7 +1,9 @@
 package com.example.CarShowroom.Service;
 
 import com.example.CarShowroom.Model.Cars;
+import com.example.CarShowroom.Model.Manufacturers;
 import com.example.CarShowroom.Repository.CarRepo;
+import com.example.CarShowroom.Repository.ManufacturerRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,9 @@ public class CarService
     @Autowired
     private CarRepo repo;
 
+    @Autowired
+    private ManufacturerRepo manRepo;
+
     public List<Cars> getALlCar()
     {
         return repo.findAllCars();
@@ -21,7 +26,7 @@ public class CarService
 
     public Cars getCarsByIds(int id)
     {
-        return repo.findByCarId(id).orElseThrow();
+        return repo.findByCarId(id).orElseThrow(() -> new RuntimeException("ID Not Found"));
     }
 
     public List<Cars> getCarsByModels(String model)
@@ -44,8 +49,37 @@ public class CarService
         return repo.findCarsByModelYears(myear);
     }
 
+    public Cars getCarsByMaxPrice()
+    {
+        return repo.findCarsByMaxPrice();
+    }
+
+    public Cars getCarsByMinPrice()
+    {
+        return repo.findCarsByMinPrice();
+    }
+
+    public List<Cars> getCarsByBetweenPrice(int sPrice, int ePricee)
+    {
+        return repo.findCarsBetween(sPrice, ePricee);
+    }
+
+    public List<Cars> getCarsByGreaterThanPrice(int gPrice)
+    {
+        return repo.findCarsGreaterThanPrice(gPrice);
+    }
+
+    public List<Cars> getCarsByLesserThanPrice(int lPrice)
+    {
+        return repo.findCarsLesserThanPrice(lPrice);
+    }
+
     public void addCars(Cars cars)
     {
+        Manufacturers manu = manRepo.findById(cars.getManufacturer().getManufacturerId())
+                        .orElseThrow(() -> new RuntimeException("Manufacturer not found with id: "
+                                + cars.getManufacturer().getManufacturerId()));
+        cars.setManufacturer(manu);
         repo.save(cars);
     }
 

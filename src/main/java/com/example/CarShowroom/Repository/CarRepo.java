@@ -30,5 +30,19 @@ public interface CarRepo extends JpaRepository<Cars, Integer>
     @Query("SELECT c FROM Cars c WHERE c.modelYear = :modelYear")
     List<Cars> findCarsByModelYears(@Param("modelYear") int modelYear);
 
+    @Query("SELECT c FROM Cars c WHERE c.price = (SELECT MAX(c2.price) FROM Cars c2)")
+    Cars findCarsByMaxPrice();
+
+    @Query("SELECT c FROM Cars c WHERE c.price = (SELECT MIN(c2.price) FROM Cars c2)")
+    Cars findCarsByMinPrice();
+
+    @Query("SELECT c FROM Cars c WHERE c.price BETWEEN :sPrice AND :ePrice")
+    List<Cars> findCarsBetween(@Param("sPrice") int sPrice, @Param("ePrice") int ePrice);
+
+    @Query("SELECT c FROM Cars c WHERE c.price > :price")
+    List<Cars> findCarsGreaterThanPrice(@Param("price") int price);
+
+    @Query("SELECT c FROM Cars c WHERE c.price < :price")
+    List<Cars> findCarsLesserThanPrice(@Param("price") int price);
 
 }

@@ -56,6 +56,36 @@ public class CarController
         return service.getCarsByModelYears(myear);
     }
 
+    @GetMapping("/car/max/price")
+    public Cars getCarsByMaxPrice()
+    {
+        return service.getCarsByMaxPrice();
+    }
+
+    @GetMapping("/car/min/price")
+    public Cars getCarsByMinPrice()
+    {
+        return service.getCarsByMinPrice();
+    }
+
+    @GetMapping("/car/pricebetween/{sprice}/{eprice}")
+    public List<Cars> getCarsBetween(@PathVariable int sprice, @PathVariable int eprice)
+    {
+        return service.getCarsByBetweenPrice(sprice, eprice);
+    }
+
+    @GetMapping("/car/greaterthan/{gPrice}")
+    public List<Cars> getCarGreaterThanPrice(@PathVariable int gPrice)
+    {
+        return service.getCarsByGreaterThanPrice(gPrice);
+    }
+
+    @GetMapping("/car/lesserthan/{lPrice}")
+    public List<Cars> getCarLesserThanPrice(@PathVariable int lPrice)
+    {
+        return service.getCarsByLesserThanPrice(lPrice);
+    }
+
     @PostMapping("/add/cars")
     public void addCars(@RequestBody Cars cars)
     {
